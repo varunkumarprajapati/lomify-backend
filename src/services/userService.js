@@ -10,3 +10,7 @@ exports.login = async (data) => {
 
   return token;
 };
+
+exports.updateUser = async (_id, data) => {
+  await User.updateOne({ _id }, data);
+};
