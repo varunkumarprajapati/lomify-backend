@@ -24,5 +24,6 @@ exports.updateUser = async (req, res) => {
 
 exports.deleteUser = async (req, res) => {
   await deleteUser(req.user._id);
+  res.clearCookie("session");
   res.status(204).send();
 };
