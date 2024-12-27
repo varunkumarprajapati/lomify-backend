@@ -11,6 +11,8 @@ async function auth(req, res, next) {
   if (!_id) throw Unauthorized("Session expired !!!");
 
   const user = await User.findById(_id);
+  if (!user) throw Unauthorized("Session expired !!!");
+
   req.user = user;
 
   next();
