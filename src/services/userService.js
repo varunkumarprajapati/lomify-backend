@@ -1,7 +1,8 @@
 const User = require("../models/User");
 
 exports.createUser = async (data) => {
-  await User.create(data);
+  const user = await User.create(data);
+  return user;
 };
 
 exports.login = async (data) => {
@@ -17,4 +18,9 @@ exports.updateUser = async (_id, data) => {
 
 exports.deleteUser = async (_id) => {
   await User.deleteOne({ _id });
+};
+
+exports.findUserById = async (_id) => {
+  const user = await User.findById(_id);
+  return user;
 };

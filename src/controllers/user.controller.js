@@ -1,3 +1,4 @@
+const { sendVerificationMail } = require("../utils/sendMail");
 const {
   createUser,
   login,
@@ -6,7 +7,9 @@ const {
 } = require("../services/userService");
 
 exports.createUser = async (req, res) => {
-  await createUser(req.body);
+  const user = await createUser(req.body);
+  const link = await user.generateVerificationLink();
+  await sendVerificationMail(user, link);
   res.status(204).send();
 };
 

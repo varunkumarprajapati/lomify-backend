@@ -47,6 +47,11 @@ const userSchema = mongoose.Schema({
   token: {
     type: String,
   },
+
+  verified: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 userSchema.statics.findByCredentials = async ({ email, password }) => {
@@ -66,6 +71,14 @@ userSchema.methods.generateAuthToken = async function () {
   await this.save();
 
   return token;
+};
+
+userSchema.methods.generateVerificationLink = async function () {
+  let link = "http://localhost:8000/api/verification/email/";
+  const _id = this._id.toString();
+  const token = jwt.sign({ _id }, process.env.SECRET_KEY, { expiresIn: "10m" });
+  link = link + token;
+  return link;
 };
 
 userSchema.pre("save", async function (next) {
