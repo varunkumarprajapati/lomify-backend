@@ -74,7 +74,7 @@ userSchema.methods.generateAuthToken = async function () {
 };
 
 userSchema.methods.generateVerificationLink = async function () {
-  let link = "http://localhost:8000/api/verification/email/";
+  let link = process.env.DOMAIN + "/api/verification/email/";
   const _id = this._id.toString();
   const token = jwt.sign({ _id }, process.env.SECRET_KEY, { expiresIn: "10m" });
   link = link + token;
