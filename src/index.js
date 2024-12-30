@@ -13,7 +13,7 @@ const error = require("./middleware/error.js");
 app.use(express.json());
 app.use(
   cors({
-    origin: ["http://localhost:8000", "https://lomify-backend.vercel.app"],
+    origin: [process.env.FRONTEND_DOMAIN],
     credentials: true,
   })
 );
