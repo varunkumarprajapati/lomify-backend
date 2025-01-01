@@ -1,3 +1,4 @@
+const { Forbidden } = require("http-errors");
 const { sendVerificationMail } = require("../utils/sendMail");
 const {
   createUser,
@@ -14,7 +15,12 @@ exports.createUser = async (req, res) => {
 };
 
 exports.login = async (req, res) => {
-  const token = await login(req.body);
+  const { user, token } = await login(req.body);
+  if (!user.verified) {
+    const link = await user.generateVerificationLink();
+    await sendVerificationMail(user, link);
+    throw Forbidden("Please verify your email.");
+  }
 
   res.cookie("session", token);
   res.status(204).send();

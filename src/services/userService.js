@@ -9,7 +9,7 @@ exports.login = async (data) => {
   const user = await User.findByCredentials(data);
   const token = user.generateAuthToken();
 
-  return token;
+  return { user, token };
 };
 
 exports.updateUser = async (_id, data) => {
