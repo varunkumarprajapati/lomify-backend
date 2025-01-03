@@ -7,6 +7,10 @@ const {
   deleteUser,
 } = require("../services/userService");
 
+exports.getUser = async (req, res) => {
+  res.send(req.user);
+};
+
 exports.createUser = async (req, res) => {
   const user = await createUser(req.body);
   const link = await user.generateVerificationLink();

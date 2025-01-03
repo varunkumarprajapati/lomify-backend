@@ -54,6 +54,15 @@ const userSchema = mongoose.Schema({
   },
 });
 
+userSchema.methods.toJSON = function () {
+  const user = this.toObject();
+  delete user.token;
+  delete user.password;
+  delete user.verified;
+  delete user.__v;
+  return user;
+};
+
 userSchema.statics.findByCredentials = async ({ email, password }) => {
   const user = await User.findOne({ email });
   if (!user) throw Unauthorized("Email & password are invalid");
@@ -65,8 +74,7 @@ userSchema.statics.findByCredentials = async ({ email, password }) => {
 };
 
 userSchema.methods.generateAuthToken = async function () {
-  const _id = this._id.toString();
-  const token = jwt.sign({ _id }, process.env.SECRET_KEY);
+  const token = jwt.sign({ _id: this._id }, process.env.SECRET_KEY);
   this.token = token;
   await this.save();
 

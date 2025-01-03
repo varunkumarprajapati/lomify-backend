@@ -7,7 +7,7 @@ exports.createUser = async (data) => {
 
 exports.login = async (data) => {
   const user = await User.findByCredentials(data);
-  const token = user.generateAuthToken();
+  const token = await user.generateAuthToken();
 
   return { user, token };
 };
