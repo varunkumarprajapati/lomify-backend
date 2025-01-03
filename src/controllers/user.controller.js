@@ -26,7 +26,11 @@ exports.login = async (req, res) => {
     throw Forbidden("Please verify your email.");
   }
 
-  res.cookie("session", token);
+  res.cookie("session", token, {
+    httpOnly: true,
+    sameSite: "None",
+    secure: true,
+  });
   res.status(204).send();
 };
 
