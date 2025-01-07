@@ -37,6 +37,7 @@ const userSchema = mongoose.Schema({
 
   avatar: {
     type: String,
+    default: "luffy",
   },
 
   about: {
