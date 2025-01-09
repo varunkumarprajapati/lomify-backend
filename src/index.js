@@ -2,13 +2,23 @@ require("./database/db.js");
 require("dotenv").config();
 require("express-async-errors");
 
-const cors = require("cors");
 const express = require("express");
-const app = express();
+const { createServer } = require("node:http");
 
+// socket
+const socket = require("./socket.js");
+
+// Routes
 const userRoute = require("./routes/userRoute.js");
 const verificationRoute = require("./routes/verificationRoute.js");
+
+// middlewares
+const cors = require("cors");
 const error = require("./middleware/error.js");
+
+const app = express();
+const server = createServer(app);
+const io = socket(server);
 
 app.use(express.json());
 app.use(
@@ -27,6 +37,6 @@ app.use("/api/verification", verificationRoute);
 
 app.use(error);
 
-app.listen(process.env.PORT, () => {
+server.listen(process.env.PORT, () => {
   console.log("Listing at port no:", process.env.PORT);
 });
