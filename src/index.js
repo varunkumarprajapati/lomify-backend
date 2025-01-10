@@ -18,7 +18,7 @@ const error = require("./middleware/error.js");
 
 const app = express();
 const server = createServer(app);
-const io = socket(server);
+socket(server);
 
 app.use(express.json());
 app.use(
@@ -38,5 +38,5 @@ app.use("/api/verification", verificationRoute);
 app.use(error);
 
 server.listen(process.env.PORT, () => {
-  console.log("Listing at port no:", process.env.PORT);
+  console.log(`Server running at : ${process.env.DOMAIN}`);
 });
