@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: lomify-backend
+    env: node
+    buildCommand: npm install
+    startCommand: node src/app.js
