@@ -11,6 +11,7 @@ const socket = require("./socket.js");
 // Routes
 const userRoute = require("./routes/userRoute.js");
 const verificationRoute = require("./routes/verificationRoute.js");
+const publicRoute = require("./routes/publicRoute.js");
 
 // middlewares
 const cors = require("cors");
@@ -34,6 +35,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/users", userRoute);
 app.use("/api/verification", verificationRoute);
+app.use("/api/public", publicRoute);
 
 app.use(error);
 
