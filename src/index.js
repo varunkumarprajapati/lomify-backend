@@ -18,18 +18,15 @@ const publicRoute = require("./routes/publicRoute.js");
 const cors = require("cors");
 const error = require("./middleware/error.js");
 
+const corsOption = require("./config/cors.js");
+
 const app = express();
 const server = createServer(app);
 socket(server);
 
 app.use(cookieParser());
 app.use(express.json());
-app.use(
-  cors({
-    origin: [process.env.FRONTEND_DOMAIN],
-    credentials: true,
-  })
-);
+app.use(cors(corsOption));
 
 app.get("/", (req, res) => {
   res.send(
