@@ -1,6 +1,6 @@
 const crypto = require("crypto");
 const createHttpError = require("http-errors");
-const { Forbidden } = require("http-errors");
+const { Forbidden, NotFound } = require("http-errors");
 const User = require("../models/User");
 const { sendVerificationMail, sendResetPasswordMail } = require("../emails");
 const { createToken } = require("../utils/tokenUtils");

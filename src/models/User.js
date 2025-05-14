@@ -3,65 +3,68 @@ const { Unauthorized } = require("http-errors");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-const userSchema = mongoose.Schema({
-  name: {
-    type: String,
-    trim: true,
-    minLength: 5,
-  },
+const userSchema = mongoose.Schema(
+  {
+    name: {
+      type: String,
+      trim: true,
+      minLength: 5,
+    },
 
-  username: {
-    type: String,
-    required: [true, "Username is required"],
-    unique: true,
-    trim: true,
-    lowercase: true,
-    minLength: 5,
-  },
+    username: {
+      type: String,
+      required: [true, "Username is required"],
+      unique: true,
+      trim: true,
+      lowercase: true,
+      minLength: 5,
+    },
 
-  email: {
-    type: String,
-    required: [true, "Email is required"],
-    unique: true,
-    trim: true,
-    lowercase: true,
-  },
+    email: {
+      type: String,
+      required: [true, "Email is required"],
+      unique: true,
+      trim: true,
+      lowercase: true,
+    },
 
-  password: {
-    type: String,
-    required: [true, "Password is required"],
-    minLength: 5,
-  },
+    password: {
+      type: String,
+      required: [true, "Password is required"],
+      minLength: 5,
+    },
 
-  avatar: {
-    type: String,
-    default: "luffy",
-  },
+    avatar: {
+      type: String,
+      default: "luffy",
+    },
 
-  about: {
-    type: String,
-    default: "New in this era !!!",
-  },
+    about: {
+      type: String,
+      default: "New in this era !!!",
+    },
 
-  token: {
-    type: String,
-  },
+    token: {
+      type: String,
+    },
 
-  isVerified: {
-    type: Boolean,
-    default: false,
-  },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
 
-  emailVerification: {
-    token: String,
-    expiry: Date,
-  },
+    emailVerification: {
+      token: String,
+      expiry: Date,
+    },
 
-  resetPassword: {
-    token: String,
-    expiry: Date,
+    resetPassword: {
+      token: String,
+      expiry: Date,
+    },
   },
-});
+  { timestamps: true }
+);
 
 userSchema.methods.toJSON = function () {
   const user = this.toObject();
