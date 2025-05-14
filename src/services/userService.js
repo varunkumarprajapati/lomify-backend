@@ -5,13 +5,6 @@ exports.createUser = async (data) => {
   return user;
 };
 
-exports.login = async (data) => {
-  const user = await User.findByCredentials(data);
-  const token = await user.generateAuthToken();
-
-  return { user, token };
-};
-
 exports.updateUser = async (_id, data) => {
   await User.updateOne({ _id }, data);
 };

@@ -1,26 +1,13 @@
-require("dotenv").config();
-const { createTransport } = require("nodemailer");
+const nm = require("nodemailer");
 
-const transporter = createTransport({
+const transporter = nm.createTransport({
   host: "smtp.gmail.com",
   port: 587,
   secure: false,
   auth: {
-    user: process.env.EMAIL_USERNAME,
+    user: process.env.EMAIL_ID,
     pass: process.env.EMAIL_PASSWORD,
   },
 });
 
-const mailer = async (to, subject, html, text) => {
-  const info = await transporter.sendMail({
-    from: "testrobber@gmail.com",
-    to,
-    subject,
-    html,
-    text,
-  });
-
-  console.log("Email Sent Successfully:", info.envelope);
-};
-
-module.exports = mailer;
+module.exports = transporter;

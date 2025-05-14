@@ -1,7 +1,9 @@
 const { HttpError } = require("http-errors");
 const { JsonWebTokenError, TokenExpiredError } = require("jsonwebtoken");
+const mongoose = require("mongoose");
 
 async function error(error, req, res, next) {
+  console.log(error);
   if (error instanceof HttpError) {
     return res
       .status(error.status)
@@ -27,16 +29,27 @@ async function error(error, req, res, next) {
   }
 
   // Mongoose Error
-  if (error.code == 11000) {
-    return res.status(409).send({
-      error: "Conflict",
-      message: `${Object.keys(error.keyValue)[0]} already in use.`,
+  if (error instanceof mongoose.Error.ValidationError) {
+    const message = Object.values(error.errors).map((e) => e.message)[0];
+    return res.status(400).send({
+      error: "ValidationError",
+      message,
     });
   }
 
-  return res
-    .status(500)
-    .send({ error: "Internal Server Error", message: error.message });
+  if (error.code == 11000) {
+    const field = Object.keys(error.keyValue)[0];
+    return res.status(409).send({
+      error: "DuplicateKeyError",
+      message: `${field} already in use.`,
+    });
+  }
+
+  return res.status(500).send({
+    error: "Internal Server Error",
+    message: error.message,
+    error: error,
+  });
 }
 
 module.exports = error;

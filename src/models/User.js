@@ -1,4 +1,3 @@
-require("dotenv").config();
 const mongoose = require("mongoose");
 const { Unauthorized } = require("http-errors");
 const bcrypt = require("bcrypt");
@@ -7,14 +6,13 @@ const jwt = require("jsonwebtoken");
 const userSchema = mongoose.Schema({
   name: {
     type: String,
-    required: true,
     trim: true,
     minLength: 5,
   },
 
   username: {
     type: String,
-    required: true,
+    required: [true, "Username is required"],
     unique: true,
     trim: true,
     lowercase: true,
@@ -23,7 +21,7 @@ const userSchema = mongoose.Schema({
 
   email: {
     type: String,
-    required: true,
+    required: [true, "Email is required"],
     unique: true,
     trim: true,
     lowercase: true,
@@ -31,7 +29,7 @@ const userSchema = mongoose.Schema({
 
   password: {
     type: String,
-    required: true,
+    required: [true, "Password is required"],
     minLength: 5,
   },
 
@@ -49,9 +47,19 @@ const userSchema = mongoose.Schema({
     type: String,
   },
 
-  verified: {
+  isVerified: {
     type: Boolean,
     default: false,
+  },
+
+  emailVerification: {
+    token: String,
+    expiry: Date,
+  },
+
+  resetPassword: {
+    token: String,
+    expiry: Date,
   },
 });
 
@@ -59,7 +67,7 @@ userSchema.methods.toJSON = function () {
   const user = this.toObject();
   delete user.token;
   delete user.password;
-  delete user.verified;
+  delete user.isVerified;
   delete user.__v;
   return user;
 };
@@ -80,14 +88,6 @@ userSchema.methods.generateAuthToken = async function () {
   await this.save();
 
   return token;
-};
-
-userSchema.methods.generateVerificationLink = async function () {
-  let link = process.env.DOMAIN + "/api/verification/email/";
-  const _id = this._id.toString();
-  const token = jwt.sign({ _id }, process.env.SECRET_KEY, { expiresIn: "10m" });
-  link = link + token;
-  return link;
 };
 
 userSchema.pre("save", async function (next) {
