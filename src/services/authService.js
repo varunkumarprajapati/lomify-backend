@@ -87,7 +87,7 @@ exports.forgotPassword = async (email) => {
   await sendResetPasswordMail({
     to: user.email,
     username: user.username,
-    link: `${process.env.CLIENT_URL}/api/auth/reset-password/${token}`,
+    link: `${process.env.CLIENT_URL}/reset-password/${token}`,
   });
 };
 exports.resetPassword = async (token, password) => {
@@ -111,5 +111,5 @@ exports.resetPassword = async (token, password) => {
 };
 
 exports.createVerifyEmailLink = (token) => {
-  return `${process.env.CLIENT_URL}/api/auth/confirm-email/${token}`;
+  return `${process.env.CLIENT_URL}/verify-email/${token}`;
 };
