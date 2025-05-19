@@ -1,6 +1,6 @@
 const {
   createUser,
-  confirmEmail,
+  verifyEmailByToken,
   login,
   logout,
   forgotPassword,
@@ -11,8 +11,8 @@ exports.createUser = async (req, res) => {
   await createUser(req.body);
   res.status(204).send();
 };
-exports.confirmEmail = async (req, res) => {
-  await confirmEmail(req.params.token);
+exports.verifyEmail = async (req, res) => {
+  await verifyEmailByToken(req.params.token);
   res.status(204).send();
 };
 exports.login = async (req, res) => {

@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const {
   createUser,
-  confirmEmail,
+  verifyEmail,
   login,
   logout,
   forgotPassword,
@@ -11,7 +11,7 @@ const {
 const auth = require("../middleware/auth.js");
 
 router.post("/register", createUser);
-router.get("/confirm-email/:token", confirmEmail);
+router.get("/verify-email/:token", verifyEmail);
 router.post("/login", login);
 router.post("/forgot-password", forgotPassword);
 router.post("/reset-password/:token", resetPassword);

@@ -23,7 +23,7 @@ exports.createUser = async ({ email, username, name, password }) => {
 
   return user;
 };
-exports.confirmEmail = async (token) => {
+exports.verifyEmailByToken = async (token) => {
   const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
   const user = await User.findOne({
     "emailVerification.token": hashedToken,
