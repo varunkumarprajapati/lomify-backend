@@ -1,12 +1,7 @@
-const User = require("../models/User");
+const publicService = require("../services/publicService");
 
-exports.getUsers = async (req, res) => {
-  const { username } = req.body;
-  const users = await User.findOne(
-    { username },
-    "username name email avatar about"
-  );
-
-  if (!users) return res.send({ message: "No user found." });
+exports.searchUsers = async (req, res) => {
+  const users = await publicService.searchUsersByUsername(req.query.query);
+  if (!users) return res.status(404).send();
   res.send(users);
 };
