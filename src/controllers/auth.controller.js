@@ -38,7 +38,7 @@ exports.logout = async (req, res) => {
   res.status(204).send();
 };
 exports.forgotPassword = async (req, res) => {
-  await forgotPassword(req.body.email);
+  await forgotPassword(req.query.email);
   res.status(204).send();
 };
 exports.resetPassword = async (req, res) => {

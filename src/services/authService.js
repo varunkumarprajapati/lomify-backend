@@ -74,7 +74,7 @@ exports.logout = async (_id) => {
 };
 exports.forgotPassword = async (email) => {
   const user = await User.findOne({ email });
-  if (!user) throw new NotFound("User not found with given email");
+  if (!user) return;
 
   const { token, hashedToken } = createToken();
 

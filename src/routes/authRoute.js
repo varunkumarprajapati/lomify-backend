@@ -13,7 +13,7 @@ const auth = require("../middleware/auth.js");
 router.post("/register", createUser);
 router.get("/verify-email/:token", verifyEmail);
 router.post("/login", login);
-router.post("/forgot-password", forgotPassword);
+router.get("/forgot-password", forgotPassword);
 router.post("/reset-password/:token", resetPassword);
 
 router.get("/logout", auth, logout);
