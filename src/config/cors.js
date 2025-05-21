@@ -1,4 +1,4 @@
-const allowedOrigins = ["http://localhost:3000", process.env.CLIENT_URL];
+const allowedOrigins = [process.env.DEV_CLIENT_URL, process.env.CLIENT_URL];
 
 const corsOptions = {
   origin: (origin, cb) => {
