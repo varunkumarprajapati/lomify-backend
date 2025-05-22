@@ -6,9 +6,6 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 const { createServer } = require("node:http");
 
-// socket
-const socket = require("./socket.js");
-
 // Routes
 const authRoute = require("./routes/authRoute.js");
 const userRoute = require("./routes/userRoute.js");
@@ -22,7 +19,7 @@ const corsOption = require("./config/cors.js");
 
 const app = express();
 const server = createServer(app);
-socket(server);
+require("./socket")(server);
 
 app.use(cookieParser());
 app.use(express.json());
