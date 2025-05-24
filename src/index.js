@@ -10,10 +10,12 @@ const { createServer } = require("node:http");
 const authRoute = require("./routes/authRoute.js");
 const userRoute = require("./routes/userRoute.js");
 const publicRoute = require("./routes/publicRoute.js");
+const messageRoute = require("./routes/messageRoute.js");
 
 // middlewares
 const cors = require("cors");
 const error = require("./middleware/error.js");
+const auth = require("./middleware/auth.js");
 
 const corsOption = require("./config/cors.js");
 
@@ -34,6 +36,7 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRoute);
 app.use("/api/users", userRoute);
 app.use("/api/public", publicRoute);
+app.use("/api/messages", auth, messageRoute);
 
 app.use(error);
 

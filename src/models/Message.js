@@ -3,12 +3,16 @@ const mongoose = require("mongoose");
 const messageSchema = mongoose.Schema(
   {
     senderId: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
       required: true,
+      index: true,
+      ref: "User",
     },
     receiverId: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
       required: true,
+      index: true,
+      ref: "User",
     },
     content: {
       type: String,
@@ -17,8 +21,8 @@ const messageSchema = mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["sent", "received", "seen", "failed"],
-      default: "sent",
+      enum: ["sent", "received", "seen", "failed", "pending"],
+      default: "pending",
     },
   },
   { timestamps: true }
