@@ -6,14 +6,34 @@ exports.saveMessage = async (data) => {
 };
 
 exports.getChat = async (_id, lastSync) => {
-  let conversation = await Message.find({
-    $or: [{ senderId: _id }, { receiverId: _id }],
-    createdAt: {
-      $gte: lastSync,
-    },
-  }).lean();
+  if (lastSync) {
+    let conversation = await Message.find({
+      $or: [{ senderId: _id }, { receiverId: _id }],
+      createdAt: {
+        $gte: lastSync,
+      },
+    }).lean();
 
-  return conversation;
+    return conversation;
+  } else {
+    const { createdAt } = await Message.findOne(
+      {
+        $or: [{ senderId: _id }, { receiverId: _id }],
+      },
+      "createdAt"
+    ).sort({
+      createdAt: -1,
+    });
+
+    let conversation = await Message.find({
+      $or: [{ senderId: _id }, { receiverId: _id }],
+      createdAt: {
+        $gte: new Date(createdAt) - 5 * 24 * 60 * 60 * 1000,
+      },
+    }).lean();
+
+    return conversation;
+  }
 };
 
 exports.getChatList = async (_id) => {
