@@ -17,11 +17,12 @@ exports.verifyEmail = async (req, res) => {
 };
 exports.login = async (req, res) => {
   const { token } = await login(req.body);
+  const isProd = process.env.NODE_ENV === "production" ? true : false;
 
   res.cookie("access_token", token, {
     httpOnly: true,
-    sameSite: "None",
-    secure: true,
+    sameSite: isProd ? "None" : "Lax",
+    secure: isProd,
   });
 
   res.status(204).send();
