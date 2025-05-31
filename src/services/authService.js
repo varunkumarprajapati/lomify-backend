@@ -1,6 +1,6 @@
 const crypto = require("crypto");
 const createHttpError = require("http-errors");
-const { Forbidden, NotFound } = require("http-errors");
+const { Forbidden } = require("http-errors");
 const User = require("../models/User");
 const { sendVerificationMail, sendResetPasswordMail } = require("../emails");
 const { createToken } = require("../utils/tokenUtils");
@@ -62,7 +62,7 @@ exports.login = async (data) => {
       username: user.username,
     });
 
-    throw Forbidden("Please verify your email.");
+    throw new Forbidden("Please verify your email.");
   }
 
   return { user, token: loginToken };
