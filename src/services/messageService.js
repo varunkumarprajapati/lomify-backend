@@ -5,10 +5,14 @@ exports.saveMessage = async (data) => {
   return message;
 };
 
-exports.getConversation = async (_id) => {
-  const conversation = Message.find({
+exports.getChat = async (_id, lastSync) => {
+  let conversation = await Message.find({
     $or: [{ senderId: _id }, { receiverId: _id }],
-  });
+    createdAt: {
+      $gte: lastSync,
+    },
+  }).lean();
+
   return conversation;
 };
 

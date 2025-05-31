@@ -1,7 +1,10 @@
 const messageService = require("../services/messageService");
 
-exports.getConversation = async (req, res) => {
-  const conversation = await messageService.getConversation(req.user._id);
+exports.getChat = async (req, res) => {
+  const conversation = await messageService.getChat(
+    req.user._id,
+    req.query.lastSync
+  );
   res.send(conversation);
 };
 

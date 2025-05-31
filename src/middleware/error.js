@@ -2,7 +2,7 @@ const { HttpError } = require("http-errors");
 const { JsonWebTokenError, TokenExpiredError } = require("jsonwebtoken");
 const mongoose = require("mongoose");
 
-async function error(error, req, res, next) {
+async function error(error, req, res) {
   console.log(error);
   if (error instanceof HttpError) {
     return res

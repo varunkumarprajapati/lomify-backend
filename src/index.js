@@ -4,7 +4,6 @@ require("express-async-errors");
 
 const express = require("express");
 const cookieParser = require("cookie-parser");
-const { createServer } = require("node:http");
 
 // Routes
 const authRoute = require("./routes/authRoute.js");
@@ -20,8 +19,6 @@ const auth = require("./middleware/auth.js");
 const corsOption = require("./config/cors.js");
 
 const app = express();
-const server = createServer(app);
-require("./socket")(server);
 
 app.use(cookieParser());
 app.use(express.json());
@@ -40,4 +37,4 @@ app.use("/api/messages", auth, messageRoute);
 
 app.use(error);
 
-server.listen(process.env.PORT);
+require("./socket")(app.listen(process.env.PORT));
