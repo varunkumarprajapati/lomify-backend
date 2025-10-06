@@ -29,9 +29,16 @@ const userSchema = mongoose.Schema(
       lowercase: true,
     },
 
+    authType: {
+      type: String,
+      enum: ["local", "google", "facebook"],
+      default: "local",
+    },
     password: {
       type: String,
-      required: [true, "Password is required"],
+      required: function () {
+        return this.authType === "local";
+      },
       minLength: 5,
     },
 
@@ -95,7 +102,7 @@ userSchema.methods.generateAuthToken = async function () {
 };
 
 userSchema.pre("save", async function (next) {
-  if (this.isModified("password")) {
+  if (this.isModified("password") && this.password) {
     this.password = await bcrypt.hash(this.password, 8);
   }
   next();

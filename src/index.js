@@ -37,4 +37,8 @@ app.use("/api/messages", auth, messageRoute);
 
 app.use(error);
 
-require("./socket")(app.listen(process.env.PORT));
+require("./socket")(
+  app.listen(process.env.PORT, () => {
+    console.log("server was listning", process.env.PORT);
+  })
+);

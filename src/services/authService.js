@@ -4,6 +4,8 @@ const { Forbidden } = require("http-errors");
 const User = require("../models/User");
 const { sendVerificationMail, sendResetPasswordMail } = require("../emails");
 const { createToken } = require("../utils/tokenUtils");
+const { OAuth2Client } = require("google-auth-library");
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 exports.createUser = async ({ email, username, name, password }) => {
   const { token, hashedToken } = createToken();
@@ -112,4 +114,33 @@ exports.resetPassword = async (token, password) => {
 
 exports.createVerifyEmailLink = (token) => {
   return `${process.env.CLIENT_URL}/verify-email/${token}`;
+};
+
+exports.googleLogin = async (googleToken) => {
+  const ticket = await client.verifyIdToken({
+    idToken: googleToken.token,
+    audience: process.env.GOOGLE_CLIENT_ID,
+  });
+
+  const payload = ticket.getPayload();
+
+  let user = await User.findOne({ email: payload.email });
+
+  if (!user) {
+    const baseUsername = payload.email.split("@")[0];
+    const username = `${baseUsername}_${Math.floor(Math.random() * 10000)}`;
+
+    user = await User.create({
+      name: payload.name,
+      username,
+      email: payload.email,
+      isVerified: payload.email_verified || false,
+      authType: "google",
+    });
+  }
+
+  // Use model method
+  const jwtToken = await user.generateAuthToken();
+
+  return { user: user.toJSON(), token: jwtToken };
 };

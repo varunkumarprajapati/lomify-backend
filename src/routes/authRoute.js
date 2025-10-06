@@ -6,6 +6,7 @@ const {
   logout,
   forgotPassword,
   resetPassword,
+  googleAuth,
 } = require("../controllers/auth.controller.js");
 
 const auth = require("../middleware/auth.js");
@@ -17,5 +18,8 @@ router.get("/forgot-password", forgotPassword);
 router.post("/reset-password/:token", resetPassword);
 
 router.get("/logout", auth, logout);
+
+// Google OAuth callback endpoint
+router.post("/google", googleAuth);
 
 module.exports = router;
