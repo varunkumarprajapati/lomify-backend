@@ -17,7 +17,7 @@ router.post("/login", login);
 router.get("/forgot-password", forgotPassword);
 router.post("/reset-password/:token", resetPassword);
 
-router.get("/logout", auth, logout);
+router.post("/logout", auth, logout);
 
 // Google OAuth callback endpoint
 router.post("/google", googleAuth);
