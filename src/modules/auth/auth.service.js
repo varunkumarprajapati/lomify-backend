@@ -134,10 +134,26 @@ class AuthService {
       });
     }
 
-    // Use model method
-    const jwtToken = await user.generateAuthToken();
+    const tokens = await generateTokens(user._id);
 
-    return { user: user.toJSON(), token: jwtToken };
+    await redis.set(
+      `sessions:access:${user._id}:${tokens.accessJti}`,
+      "active",
+      "EX",
+      Number(process.env.ACCESS_TOKEN_EXPIRES_IN),
+    );
+
+    await redis.set(
+      `sessions:refresh:${user._id}:${tokens.refreshJti}`,
+      "active",
+      "EX",
+      Number(process.env.REFRESH_TOKEN_EXPIRES_IN),
+    );
+
+    return {
+      accessToken: tokens.accessToken,
+      refreshToken: tokens.refreshToken,
+    };
   };
 }
 

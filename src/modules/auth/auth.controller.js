@@ -74,22 +74,25 @@ exports.resetPassword = async (req, res) => {
 exports.googleAuth = async (req, res) => {
   try {
     const { token } = req.body;
-    const { user, token: jwtToken } = await authService.googleLogin(token);
 
-    // Send cookie (secure, httpOnly)
-    res.cookie("access_token", jwtToken, {
+    const { accessToken, refreshToken } = await authService.googleLogin(token);
+    const isProd = process.env.NODE_ENV === "production" ? true : false;
+
+    res.cookie("lomify_access_token", accessToken, {
       httpOnly: true,
-      secure: true, // true if using https (Vercel/Render)
-      sameSite: "none", // for cross-domain
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      sameSite: isProd ? "None" : "Lax",
+      secure: isProd,
+      maxAge: Number(process.env.ACCESS_TOKEN_EXPIRES_IN),
     });
 
-    res.status(200).json({
-      success: true,
-      message: "Google login successful",
-      token: jwtToken,
-      user,
+    res.cookie("lomify_refresh_token", refreshToken, {
+      httpOnly: true,
+      sameSite: isProd ? "None" : "Lax",
+      secure: isProd,
+      maxAge: Number(process.env.REFRESH_TOKEN_EXPIRES_IN),
     });
+
+    return res.json({ message: "user authenticated successfully" });
   } catch (error) {
     console.error("Google Auth Error:", error);
     res
