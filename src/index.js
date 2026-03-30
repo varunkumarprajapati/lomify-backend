@@ -7,6 +7,7 @@ const socket = require("./socket");
 
 async function main() {
   await db.connect();
+
   socket(app.listen(process.env.PORT));
 }
 

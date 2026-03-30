@@ -24,7 +24,6 @@
     "http-errors": "^2.0.0",
     "ioredis": "^5.10.1",
     "jsonwebtoken": "^9.0.2",
-    "kickbox": "^2.0.4",
     "mongoose": "^8.9.2",
     "nodemailer": "^8.0.4",
     "socket.io": "^4.8.1",

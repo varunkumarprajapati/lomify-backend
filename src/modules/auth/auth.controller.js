@@ -9,7 +9,7 @@ exports.createUser = async (req, res) => {
 };
 
 exports.verifyEmail = async (req, res) => {
-  await verifyEmailByToken(req.params.token);
+  await authService.verifyEmailByToken(req.params.token);
   return res.status(200).json({ message: "Email verified Successfully" });
 };
 
