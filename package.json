@@ -12,7 +12,8 @@
   "description": "",
   "dependencies": {
     "axios": "^1.12.2",
-    "bcrypt": "^5.1.1",
+    "bcryptjs": "^3.0.3",
+    "bullmq": "^5.71.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
@@ -21,10 +22,15 @@
     "express-async-errors": "^3.1.1",
     "google-auth-library": "^10.4.0",
     "http-errors": "^2.0.0",
+    "ioredis": "^5.10.1",
     "jsonwebtoken": "^9.0.2",
     "kickbox": "^2.0.4",
     "mongoose": "^8.9.2",
-    "nodemailer": "^6.9.16",
-    "socket.io": "^4.8.1"
+    "nodemailer": "^8.0.4",
+    "socket.io": "^4.8.1",
+    "uuid": "^13.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
   }
 }

@@ -1,9 +1,9 @@
-const mongoose = require("mongoose");
+const { model, Schema } = require("mongoose");
 const { Unauthorized } = require("http-errors");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-const userSchema = mongoose.Schema(
+const userSchema = new Schema(
   {
     name: {
       type: String,
@@ -52,26 +52,12 @@ const userSchema = mongoose.Schema(
       default: "New in this era !!!",
     },
 
-    token: {
-      type: String,
-    },
-
     isVerified: {
       type: Boolean,
       default: false,
     },
-
-    emailVerification: {
-      token: String,
-      expiry: Date,
-    },
-
-    resetPassword: {
-      token: String,
-      expiry: Date,
-    },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 userSchema.methods.toJSON = function () {
@@ -84,21 +70,13 @@ userSchema.methods.toJSON = function () {
 };
 
 userSchema.statics.findByCredentials = async ({ email, password }) => {
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email, isVerified: true }).lean();
   if (!user) throw Unauthorized("Email & password are invalid");
 
   const isTrue = await bcrypt.compare(password, user.password);
   if (!isTrue) throw Unauthorized("Email & password are invalid");
 
   return user;
-};
-
-userSchema.methods.generateAuthToken = async function () {
-  const token = jwt.sign({ _id: this._id }, process.env.SECRET_KEY);
-  this.token = token;
-  await this.save();
-
-  return token;
 };
 
 userSchema.pre("save", async function (next) {
@@ -108,6 +86,6 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-const User = mongoose.model("User", userSchema);
+const User = model("User", userSchema);
 
 module.exports = User;

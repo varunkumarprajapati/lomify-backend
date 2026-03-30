@@ -7,9 +7,9 @@ const {
   forgotPassword,
   resetPassword,
   googleAuth,
-} = require("../controllers/auth.controller.js");
+} = require("./auth.controller.js");
 
-const auth = require("../middleware/auth.js");
+const auth = require("../../middleware/auth.middleware.js");
 
 router.post("/register", createUser);
 router.get("/verify-email/:token", verifyEmail);
