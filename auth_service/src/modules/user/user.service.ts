@@ -1,6 +1,7 @@
 import b from "bcrypt";
 import createHttpError from "http-errors";
 import { UserModel } from "@/models/user.model.js";
+import mongoose from "mongoose";
 
 class UserService {
   async create(payload: UserCreateDTO) {
@@ -60,6 +61,18 @@ class UserService {
     const user = await UserModel.findById(id, { password: 0 });
     if (!user) throw createHttpError(404, "User not found");
     return user;
+  }
+
+  async getAll(currentUserId: string) {
+    const users = await UserModel.find({
+      _id: { $ne: currentUserId },
+      isVerified: true,
+    })
+      .sort("createdAt")
+      .select("-password -isVerified -__v -updatedAt")
+      .lean();
+
+    return users;
   }
 }
 
