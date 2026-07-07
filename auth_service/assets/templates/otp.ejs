@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OTP Verification</title>
+  </head>
+
+  <body
+    style="
+      margin: 0;
+      padding: 0;
+      background: #f4f4f4;
+      font-family: Arial, sans-serif;
+    "
+  >
+    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+      <tr>
+        <td align="center" style="padding: 40px 15px">
+          <table
+            width="420"
+            cellpadding="0"
+            cellspacing="0"
+            border="0"
+            style="background: #ffffff; border-radius: 10px; padding: 40px"
+          >
+            <tr>
+              <td align="center">
+                <h2 style="margin: 0; color: #222">OTP Verification</h2>
+              </td>
+            </tr>
+
+            <tr>
+              <td
+                align="center"
+                style="padding-top: 20px; color: #555; font-size: 16px"
+              >
+                Hello,
+                <br /><br />
+                Use the OTP below to verify your email address.
+              </td>
+            </tr>
+
+            <tr>
+              <td align="center" style="padding: 25px 0">
+                <div
+                  style="
+                    display: inline-block;
+                    background: #f2f2f2;
+                    padding: 15px 35px;
+                    font-size: 32px;
+                    letter-spacing: 5px;
+                    font-weight: bold;
+                    color: #111;
+                    border-radius: 8px;
+                  "
+                >
+                  <%= otp %>
+                </div>
+              </td>
+            </tr>
+
+            <tr>
+              <td align="center" style="color: #666; font-size: 14px">
+                Email:
+                <strong><%= email %></strong>
+              </td>
+            </tr>
+
+            <tr>
+              <td
+                align="center"
+                style="padding-top: 30px; color: #999; font-size: 12px"
+              >
+                This OTP is valid for 10 minutes.
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

@@ -1,0 +1,79 @@
+name: Build and Deploy to Production
+
+on:
+  push:
+    branches:
+      - main # Triggers the pipeline when code is pushed to your main branch
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write # Necessary to grant push rights to GHCR
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # --- 1. Build & Push Auth Service ---
+      - name: Build and Push Auth Service
+        uses: docker/build-push-action@v5
+        with:
+          context: ./auth_service
+          file: ./auth_service/Dockerfile
+          target: production
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/lomify-auth-service:latest
+
+      # --- 2. Build & Push RTC Service ---
+      - name: Build and Push RTC Service
+        uses: docker/build-push-action@v5
+        with:
+          context: ./rtc_service
+          file: ./rtc_service/Dockerfile
+          target: production
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/lomify-rtc-service:latest
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build-and-push
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      # Securely syncs only the management config files directly over to your server instance
+      - name: Copy Compose and Nginx files to Server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "docker-compose.prod.yml,nginx/nginx.conf"
+          target: "~/lomify_backend"
+
+      # Connects via SSH to pull down changes and reload system without losing configurations
+      - name: SSH to Server & Pull Images
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd ~/lomify_backend
+
+            # Temporary authentication to registry using the pipeline execution token to pull images
+            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+            # Fetch the updated build layers and cycle the state of changed containers smoothly
+            docker compose -f docker-compose.prod.yml pull
+            docker compose -f docker-compose.prod.yml up -d --remove-orphans
