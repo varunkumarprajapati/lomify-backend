@@ -18,8 +18,7 @@ services:
 
   # Authentication Microservice
   auth-service:
-    # ⚠️ REPLACE 'your-github-username' WITH YOUR ACTUAL GITHUB USERNAME (LOWERCASE)
-    image: ghcr.io/your-github-username/lomify-auth-service:latest
+    image: ghcr.io/lomify-backend/lomify-auth-service:latest
     container_name: lomify-auth-service
     restart: always
     env_file:
@@ -32,8 +31,7 @@ services:
 
   # Real-Time RTC Microservice
   rtc-service:
-    # ⚠️ REPLACE 'your-github-username' WITH YOUR ACTUAL GITHUB USERNAME (LOWERCASE)
-    image: ghcr.io/your-github-username/lomify-rtc-service:latest
+    image: ghcr.io/lomify-backend/lomify-rtc-service:latest
     container_name: lomify-rtc-service
     restart: always
     env_file:
