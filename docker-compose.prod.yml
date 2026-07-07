@@ -18,7 +18,7 @@ services:
 
   # Authentication Microservice
   auth-service:
-    image: ghcr.io/lomify-backend/lomify-auth-service:latest
+    image: ghcr.io/varunkumarprajapati/lomify-auth-service:latest
     container_name: lomify-auth-service
     restart: always
     env_file:
@@ -31,7 +31,7 @@ services:
 
   # Real-Time RTC Microservice
   rtc-service:
-    image: ghcr.io/lomify-backend/lomify-rtc-service:latest
+    image: ghcr.io/varunkumarprajapati/lomify-rtc-service:latest
     container_name: lomify-rtc-service
     restart: always
     env_file:
